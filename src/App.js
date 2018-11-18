@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Form } from './components /Form';
+import Form from './components /Form';
+import TodoList from './components /TodoList';
 
 
 class App extends Component {
@@ -81,26 +82,18 @@ class App extends Component {
         <header className="App-header">
             <h1 className="zagolovok">{this.state.message}</h1>
             <main className="container"> 
-              {/* <Form /> */}
-              <form onSubmit={ this.formSubmitted.bind(this)}>
-              <div className="form-group has-success">
-                <label className="form-control-label" htmlFor="inputSuccess1">Create Todo</label>
-                <input  onChange={(event) => this.newTodoChange(event)} type="text"  className="form-control is-valid" id="inputValid" value={this.state.newTodo}/>
-                <br />
-                <button type="submit" className="btn btn-success">Crete one todo</button>
-                <span />
-              <button type="button" class="btn btn-info" onClick={() => this.allDone()}>All Complete</button>
-              </div>
-              </form>
-              <ul>
-               {this.state.todos.map((todo, index) => {
-                  return(<li  key={todo.title}>
-                  <input type="checkbox" onChange={(event)=> this.togleCheckBox(event, index)} checked={todo.done}/>
-                    <span style={{ textDecoration: todo.done ? 'line-through' : 'inherit'}}> {todo.title} </span>
-                    <button type="button" class="btn btn-outline-danger " onClick={()=> this.removeTodo(index)}>Remove</button>
-                  </li>)
-                })}
-              </ul>
+              <Form 
+              // here we need bind all our this 
+              formSubmitted={this.formSubmitted.bind(this)}
+               newTodoChange={this.newTodoChange.bind(this)} 
+                newTodo={this.state.newTodo}
+                allDone={this.allDone.bind(this)} 
+               />
+              <TodoList 
+                todos={this.state.todos}
+                togleCheckBox={this.togleCheckBox.bind(this)}
+                removeTodo={this.removeTodo.bind(this)}
+              />
             </main>
         </header>
       </div>
