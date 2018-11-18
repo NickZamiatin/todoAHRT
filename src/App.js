@@ -10,7 +10,15 @@ class App extends Component {
         message : "Hello Nick you will be working on amazing team",
         newTodo : " ",
         todos : [{
-          title : 'Bla',
+          title : 'Inveco',
+          done : false
+        },
+        {
+          title : 'AWS',
+          done : false
+        },
+        {
+          title : 'IBM',
           done : false
         }]
     }
@@ -27,7 +35,6 @@ class App extends Component {
 
   formSubmitted(event) {
     event.preventDefault();
-
     this.setState({
       newTodo: '',
       todos: [...this.state.todos, {
@@ -35,6 +42,36 @@ class App extends Component {
         done: false
       }]
     });
+  }
+
+  togleCheckBox(event, index){
+    const todos =  [...this.state.todos];
+    todos[index] = {...todos[index]}
+    todos[index].done = event.target.checked
+    this.setState({
+      todos,
+    });
+  }
+
+
+  removeTodo(index){
+    const todos =  [...this.state.todos];
+    todos.splice(index, 1)
+    this.setState({
+      todos
+    })
+  }
+
+  allDone(){
+    const todos = this.state.todos.map(todo => {
+      return {
+        ...todo,
+        done : true
+      }
+    })
+    this.setState({
+      todos
+    })
   }
 
 
@@ -51,11 +88,17 @@ class App extends Component {
                 <input  onChange={(event) => this.newTodoChange(event)} type="text"  className="form-control is-valid" id="inputValid" value={this.state.newTodo}/>
                 <br />
                 <button type="submit" className="btn btn-success">Crete one todo</button>
+                <span />
+              <button type="button" class="btn btn-info" onClick={() => this.allDone()}>All Complete</button>
               </div>
               </form>
               <ul>
-               {this.state.todos.map(todo => {
-                  return<li  key={todo.title}>{todo.title}</li>
+               {this.state.todos.map((todo, index) => {
+                  return(<li  key={todo.title}>
+                  <input type="checkbox" onChange={(event)=> this.togleCheckBox(event, index)} checked={todo.done}/>
+                    <span style={{ textDecoration: todo.done ? 'line-through' : 'inherit'}}> {todo.title} </span>
+                    <button type="button" class="btn btn-outline-danger " onClick={()=> this.removeTodo(index)}>Remove</button>
+                  </li>)
                 })}
               </ul>
             </main>
